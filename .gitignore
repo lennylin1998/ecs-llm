@@ -2,7 +2,8 @@
 .venv/
 results/
 __pycache__/
-data/
 *.pyc
 .DS_Store
 .ipynb_checkpoints/
+/src/data/
+/src/negative-sentiment-model/
