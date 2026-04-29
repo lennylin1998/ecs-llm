@@ -27,19 +27,20 @@ The experiment runs in numbered steps. Each step has a corresponding module in `
 |------|--------|-------------|
 | 1 | `src/pair_builder.py` | Download dataset and extract single-turn complaint–response pairs |
 | 2 | `src/FIS.ipynb` | Score each complaint with FIS (DistilBERT V_inv + caps / punct / urgency) |
-| 2b | `src/FIS.ipynb` — Stratified Sampling section | Bin FIS into tertiles; sample 600 benchmark pairs and 30 pilot pairs |
+| 3 | `src/FIS.ipynb` — Stratified Sampling section | Bin FIS into tertiles; sample 600 benchmark pairs and 30 pilot pairs |
+| 4 | `src/judge_pilot.ipynb` | Validate LLM-as-judge rubric on 30 pilot pairs; compute Cohen's κ vs. human raters |
 
 ---
 
 ## Module Reference
 
-### `src/pair_builder.py` — Step 1: Pair Extraction
+### `src/pair_builder.py` — Pair Extraction
 
 Downloads the Customer Support on Twitter dataset via `kagglehub` and reconstructs customer→brand reply threads. Filters to single-turn pairs only — exchanges where the customer tweet is the opening message, not a follow-up — and assigns each pair a domain label (`airline` or `technology`). Output is saved to `data/pairs_raw.csv`.
 
 ---
 
-### `src/FIS.ipynb` — Steps 2 & 2b: FIS Scoring + Stratified Sampling
+### `src/FIS.ipynb` — FIS Scoring + Stratified Sampling
 
 **FIS Scoring** (`## Remaining FIS Components` section)
 
@@ -64,6 +65,27 @@ Bins FIS into low / moderate / high tertiles, then draws 100 pairs per cell (2 d
 
 ---
 
+### `src/judge_pilot.ipynb` — LLM-as-Judge Pilot Validation
+
+Validates the tone-frustration fit rubric on 30 pilot pairs before scaling to the full 600-instance run. GPT-4o acts as the judge; its scores are compared against two human raters using Cohen's κ. κ ≥ 0.60 on both raters is the go/no-go gate.
+
+- **Input:** `data/pilot_30.csv`
+- **Output:** `data/pilot_scores.csv` (judge scores + human rater columns to fill in manually)
+
+**Tone-Frustration Fit Rubric (3-point scale)**
+
+The judge is given the customer complaint and the agent response and asked to score tone-frustration fit:
+
+| Score | Label | Description |
+|-------|-------|-------------|
+| 1 | Mismatched | Tone is clearly wrong — e.g. cheerful/procedural when customer is in crisis, or dramatic over-apology for a trivial question |
+| 2 | Partially matched | Issue acknowledged but tone noticeably off — too warm, too cold, or too generic for the emotional register |
+| 3 | Well matched | Tone appropriately calibrated — urgent and warm when customer is upset, light and helpful when inquiry is casual |
+
+Each score level includes two anchor examples (complaint + response + explanation) in the prompt to reduce boundary ambiguity between levels.
+
+---
+
 ## Data
 
 Large files (`data/`, model weights) are gitignored. The following pre-computed assets
@@ -75,8 +97,8 @@ All SharePoint assets are available at this [shared folder](https://uillinoisedu
 
 | File / Directory | Required by | Notes |
 |---|---|---|
-| `data/pairs_raw.csv` | Step 2 FIS notebook | SharePoint |
+| `data/pairs_raw.csv` | FIS notebook | SharePoint |
 | `data/output.csv` | FIS notebook — FIS Scoring section | SharePoint |
 | `negative-sentiment-model/` | FIS notebook (`load_trained_model()`) | SharePoint |
-| `data/benchmark_600.csv` | Step 4 judge pilot, Step 5 LLM generation | Produced locally by FIS.ipynb |
-| `data/pilot_30.csv` | Step 4 judge pilot | Produced locally by FIS.ipynb |
+| `data/benchmark_600.csv` | judge pilot, LLM generation | Produced locally by FIS.ipynb |
+| `data/pilot_30.csv` | judge pilot | Produced locally by FIS.ipynb |
