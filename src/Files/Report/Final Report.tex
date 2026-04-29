@@ -1,0 +1,219 @@
+\pdfoutput=1
+
+\documentclass[11pt]{article}
+
+\usepackage{ACL2023}
+
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{microtype}
+
+\usepackage{inconsolata}
+
+\usepackage{listings}
+
+
+\title{Evaluating Employee Communication Behaviors Using Large Language Models}
+
+\author{Zhanchen Kang \and Yu-Liang Lin  \\
+	School of Information Science \\
+	University of Illinois Urbana-Champaign \\
+	Champaign IL, USA \\
+	\texttt{zk11@illinois.edu} \quad \texttt{yl198@illinois.edu}
+}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+	Large language models (LLMs) are increasingly deployed in customer-facing service contexts, yet their sociolinguistic behavior---specifically how well they calibrate empathy to a customer's emotional state---remains largely unevaluated. This report describes a research project investigating whether frontier LLMs systematically over- or under-empathize relative to real human support agents, and whether such miscalibration varies across industry domains. We use the Customer Support on Twitter dataset \cite{stuart_axelbrooke_2017} as a naturalistic behavioral benchmark, extracting 600 complaint--response pairs stratified across two domains (airlines, telecom) and three frustration levels. We prompt three frontier models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Flash) with each complaint and compare their outputs against human agent responses using a two-dimensional Empathy Calibration Score (ECS). This checkpoint report details the motivation, related work, methodology, experiment design, and a three-week execution plan.
+\end{abstract}
+
+\section{Research Question}
+
+
+This study addresses two primary questions:
+
+\begin{enumerate}
+	\item Do frontier LLMs systematically over-empathize or under-empathize relative to trained human customer support agents, as measured by a calibration delta against a naturalistic behavioral benchmark?
+	\item Is this empathy miscalibration consistent across industry domains, or does it vary by context---specifically between airlines and telecom?
+\end{enumerate}
+
+Together, these questions target a concrete deployment risk: enterprises selecting or prompting LLMs for customer service may unknowingly be introducing systematic tonal mismatch. A model that sounds empathetic in general benchmarks may be tonally inappropriate in practice---either performing hollow over-apology, or presenting as cold and procedural when a customer is genuinely distressed.
+
+
+\section{Related Work}
+
+\subsection{Sycophancy and Over-Helpfulness in LLMs}
+
+A well-documented failure mode of RLHF-trained models is sycophancy---the tendency to agree with or flatter users at the expense of accuracy or appropriate restraint \cite{sycophancy_causes2024, rlhf_limits2025}. \citet{sycophancy_rebuttal2025} found that LLMs alter responses to conform with user expectations across a range of tasks. Recent mechanistic work shows that sycophantic agreement and sycophantic praise are distinct, independently steerable behaviors encoded in separate linear directions in latent space \cite{vennemeyer2026sycophancy}---suggesting miscalibration is not monolithic. Separately, \citet{zewe2026} found that over extended interactions, personalization features significantly increase the likelihood an LLM becomes sycophantic, noting that ``evaluation methods are lagging behind'' how people actually use these models. In a customer service context, sycophancy manifests not as factual capitulation but as tonal over-correction: excessive apology, performed urgency, and mismatched warmth.
+
+\subsection{Empathy Evaluation in NLP}
+
+The NLP empathy literature is growing but domain-narrow. A systematic review of 12 studies on LLMs and empathy found that 7 focused exclusively on medical contexts, with all studies evaluating ChatGPT-3.5 \cite{llm_empathy_review2024}. \citet{kumar2026} found that LLMs nearly match expert reliability when judging empathic communication, but their analysis was limited to personal-problem support contexts rather than transactional service dialogues. Existing metrics---BLEU, ROUGE, BERTScore---are inadequate for empathy evaluation, measuring lexical overlap rather than emotional alignment \cite{iyer2026heartunifiedbenchmarkassessing}. A recent metric framework by \citet{hong2025} proposes combining sentiment alignment and semantic relevance into a composite empathy score, but assumes that empathy should always trend positive---inappropriate for contexts where matching a customer's matter-of-fact tone is the correct response.
+
+\subsection{Customer Support NLP}
+
+The most closely related applied work is \citet{csconv2025}, which introduces a customer support conversation dataset grounded in structured support strategies and evaluates multiple LLMs on their ability to generate empathetic, coherent responses. Notably, the authors found that GPT-4o produces shorter, less emotionally rich dialogues than DeepSeek-R1. However, CSConv uses expert-rewritten conversations as the gold standard rather than raw human agent behavior, idealizing away the naturalistic calibration signal that makes our benchmark distinctive. No prior work, to our knowledge, uses real, unmodified paired complaint--response data as a behavioral ground truth for evaluating LLM tonal calibration.
+
+\subsection{The Gap}
+
+Across these three bodies of work, a consistent blind spot emerges. Sycophancy research measures opinion-conformity, not tonal appropriateness. Empathy research evaluates support-context warmth, not calibration to frustration level. Customer service NLP evaluates response quality against idealized rewrites, not observed human behavior. Our study sits at the intersection of all three and uses a unique data asset---naturalistic, multi-domain, paired conversational data---to fill it.
+
+\section{Methodology}
+The study follows a three-phase empirical design: (1) benchmark construction from real conversational data, (2) LLM response generation under a neutral prompt, and (3) calibration scoring and statistical comparison. No model training is required.
+
+\subsection{Benchmark Construction}
+
+We parse the Twitter Customer Support dataset \cite{stuart_axelbrooke_2017} to extract single-turn complaint--response pairs, where a customer tweet is followed directly by a verified brand account reply. We compute a Frustration Intensity Score (FIS) for each customer tweet using a composite of VADER sentiment, all-caps ratio, punctuation density, and presence of urgency vocabulary (``never again'', ``unacceptable'', ``immediately''). FIS is binned into three levels: low, moderate, and high. We retain two industry domains---airlines and telecom---and apply stratified sampling to produce a benchmark of 600 instances (100 per cell: 2 domains $\times$ 3 FIS levels).
+
+\subsection{LLM Response Generation}
+
+Each of the 600 customer complaint tweets is passed to three frontier models under an identical, minimal system prompt:
+
+\begin{quote}
+	\textit{``You are a customer support agent. Respond to the following customer message in one to three sentences.''}
+\end{quote}
+
+No persona, no tone instruction, and no domain context is supplied. This deliberate minimalism ensures we measure the model's default social calibration rather than a prompted one. The three models evaluated are GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash. The human agent's original response from the dataset serves as the behavioral reference (ground truth).
+
+\subsection{Empathy Calibration Score (ECS)}
+
+The ECS is a two-dimensional rubric designed to measure not absolute empathy, but calibration---how well a response's empathetic register matches what the customer's expressed frustration level warrants. Table~\ref{tab:ecs} describes each dimension.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{p{2cm}p{3.2cm}p{1.5cm}}
+		\hline
+		\textbf{Dimension} & \textbf{Measurement} & \textbf{Weight at high FIS} \\
+		\hline
+		Apology density & Normalized count of apology/regret terms (regex). Fully automated. & Higher weight \\
+		\hline
+		Tone-frustration fit & LLM-as-judge (GPT-4o) scores 1--5: does the response tone match the emotional register of the complaint? & Equal weight \\
+		\hline
+	\end{tabular}
+	\caption{ECS dimensions, measurement approach, and weighting at high frustration levels.}
+	\label{tab:ecs}
+\end{table}
+
+Scores for each dimension are computed for both the LLM response and the human agent response. The calibration delta---ECS(LLM) $-$ ECS(human)---is the primary outcome variable. A positive mean delta indicates the model is systematically over-empathetic relative to trained human agents; a negative delta indicates under-empathizing. A distribution centered at zero indicates calibration.
+
+\subsection{Validation}
+
+Before scaling, the LLM-as-judge rubric is validated on a 30-instance pilot, comparing GPT-4o judge scores against two human raters. Acceptable agreement is defined as Cohen's $\kappa \geq 0.60$. If the pilot fails this threshold, the rubric is revised and re-piloted before the full run proceeds.
+
+\subsection{Statistical Analysis}
+
+Two tests map to the two research questions:
+
+\begin{enumerate}
+	\item \textbf{Systematic miscalibration per model:} For each model, a one-sample $t$-test tests whether the mean calibration delta $\Delta$ differs significantly from zero. We report the mean $\Delta$ with a 95\% confidence interval and Cohen's $d$ as an effect-size measure. A positive mean $\Delta$ with $p < 0.05$ constitutes evidence of systematic over-empathizing relative to trained human agents.
+	\item \textbf{Domain comparison:} A two-way ANOVA (model $\times$ domain) on the calibration delta tests whether miscalibration is domain-invariant or whether certain models are well-calibrated for airline complaints but miscalibrated for telecom, or vice versa.
+\end{enumerate}
+
+\section{Datasets}
+The primary dataset is the Customer Support on Twitter corpus \citep{stuart_axelbrooke_2017}, a CSV of over 3 million tweets and replies from major consumer brands including airlines (AmericanAir, JetBlue, SouthwestAir, AlaskaAir), telecom providers (sprintcare, Ask\_Spectrum, TMobileHelp), and others. Each row includes tweet ID, author ID, text, and a field for the tweet being replied to, enabling thread reconstruction.
+
+We use this dataset in two ways:
+
+\begin{itemize}
+	\item \textbf{Test benchmark:} 600 filtered, stratified complaint--response pairs (as described above). These are never seen by any model during generation.
+	\item \textbf{Judge calibration:} 30 additional pairs for the LLM-as-judge pilot validation, drawn outside the 600 main instances.
+\end{itemize}
+
+No additional external datasets are required. The human agent responses embedded in the dataset serve as the behavioral ground truth, which is the key design advantage of this corpus over synthetic alternatives.
+
+For a detailed full conversation sample please check Table~\ref{full-conversation-sample}. This dataset is not ordered in how conversation is done. Thus, we applied a program to generate the fully ordered conversation shown in Appendix~\ref{Full-Conversation-Sample-twitter}.
+
+\begin{table*}
+	\centering
+	\begin{tabular}{lll}
+		\hline
+		\textbf{tweet\_id} & \textbf{text} & \textbf{response\_tweet\_id}\\
+		\hline
+		1 & @115712 I understand. I ... further assist. & 2 \\
+		2 & @sprintcare and how do you propose we do that & None \\
+		3 & @sprintcare I have sent several private ... as usual & 1 \\
+		4 & @115712 Please send us a Private ... your profile. & 3 \\
+		5 & @sprintcare I did. & 4 \\
+		6 & @115712 Can you please send ... your account? & 5,7 \\
+		8 & @sprintcare is the worst customer service & 9,6,10 \\
+		\hline
+	\end{tabular}
+	\caption{\label{full-conversation-sample}
+		Samples of a full conversation in "Customer Support on Twitter"\citep{stuart_axelbrooke_2017}. 
+	}
+\end{table*}
+
+\section{Experiments}
+\subsection{Experiments Setup}
+
+Table~\ref{tab:timeline} outlines the three-week execution plan for this study.
+
+\begin{table*}
+	\centering
+	\begin{tabular}{p{1cm}p{7cm}p{5cm}}
+		\hline
+		\textbf{Week} & \textbf{Tasks} & \textbf{Deliverables} \\
+		\hline
+		Week 1 & Parse Twitter CSV, reconstruct threads, filter to single-turn pairs. Compute FIS using VADER + lexical features. Apply domain mapping (airlines vs.\ telecom). Stratified sample to 600 instances. Write and pilot LLM-as-judge rubric on 30 pairs; measure Cohen's $\kappa$ with 2 human raters. & 600-instance benchmark CSV. Validated judge rubric. Go/no-go on $\kappa$ threshold. \\
+		\hline
+		Week 2 & Run all 600 complaints through GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash (3 $\times$ 600 = 1,800 API calls). Compute apology density for all outputs (automated). Run LLM-as-judge for tone-frustration fit scores on all 1,800 + 600 human responses. Compute ECS and calibration delta per instance. & Full ECS delta table (2,400 rows). Estimated API cost: \$40--60. \\
+		\hline
+		Week 3 & Run one-sample $t$-tests per model (delta vs.\ zero); compute mean $\Delta$, 95\% CI, and Cohen's $d$. Run two-way ANOVA (model $\times$ domain) with Tukey HSD post-hoc. Visualize delta distributions as ridge plots by model and FIS level. Interpret findings. Draft report sections, limitations, and future work. & Analysis notebook. Ridge plot figures. Final report. \\
+		\hline
+	\end{tabular}
+	\caption{Three-week execution plan for the empathy calibration study.}
+	\label{tab:timeline}
+\end{table*}
+
+\subsection{Evaluation Metrics}
+
+Model performance is evaluated using the two-dimensional ECS described in the Methodology section. The primary outcome is the calibration delta $\Delta = ECS(LLM) - ECS(human)$, computed per instance and aggregated per model and domain. We also report apology density independently as a fully model-agnostic signal.
+
+\subsection{Baselines}
+
+We evaluate three frontier models as candidate systems: GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash. All three are evaluated under the same minimal neutral prompt with no persona or tone instruction. The human agent responses from the Twitter dataset serve as the behavioral ground truth baseline.
+
+\subsection{Current Results}
+
+\textbf{Results pending. Experiments are scheduled for execution in Week 2 of the three-week plan.}
+
+\subsection{Expected Results}
+
+Based on the literature, we anticipate positive mean calibration deltas for all three frontier models---indicating systematic over-empathizing relative to human agents. We expect each model's one-sample $t$-test to return $p < 0.05$ with a positive mean $\Delta$ and a moderate-to-large Cohen's $d$, reflecting consistent directional bias. We expect delta magnitudes to be higher for high-FIS complaints (frustrated customers trigger stronger RLHF-driven warmth) and to vary across domains (telecom agent responses in the dataset tend to be more procedural, while airline agents are more warm, which may interact differently with model defaults). The domain ANOVA interaction term is the highest-stakes finding: if model $\times$ domain is significant, it suggests that miscalibration is not a fixed property of a model but context-dependent, which has direct implications for domain-specific prompting or fine-tuning.
+
+\section{Challenges and Adjustments}
+
+\subsection{Simplification from Original Design}
+
+The original design included four ECS dimensions and a supervised fine-tuning (SFT) sub-experiment on Llama 3 8B as a contrastive model. Both were removed for scope and infrastructure reasons. The ECS was collapsed from four dimensions (apology density, urgency match, solution-orientation ratio, tone warmth) to two (apology density, tone-frustration fit). The two dropped dimensions---urgency match and solution ratio---are harder to define and score reliably in short tweets, and removing them produces a cleaner, more defensible metric. The SFT experiment requires GPU access, training pipelines, and at least two additional weeks, and is deferred to future work. The core empirical claim is fully supported without it.
+
+\bibliography{anthology,custom}
+\bibliographystyle{acl_natbib}
+
+\appendix
+
+\section{Full Conversation Sample}
+\label{Full-Conversation-Sample-twitter}
+This section shows a sample of a full conversation.
+
+\textbf{Customer:} @sprintcare I have sent several private messages and no one is responding as usual
+
+\textbf{Sprintcare:} @115712 I understand. I would like to assist you. We would need to get you into a private secured link to further assist.
+
+\textbf{Customer:} @sprintcare and how do you propose we do that
+
+\textbf{Sprintcare:} @115712 Can you please send us a private message, so that I can gain further details about your account?
+
+\textbf{Customer:} @sprintcare I did.
+
+\textbf{Sprintcare:} @115712 Please send us a Private Message so that we can further assist you. Just click ‘Message’ at the top of your profile.
+
+\textbf{Customer:} @sprintcare is the worst customer service
+
+\end{document}

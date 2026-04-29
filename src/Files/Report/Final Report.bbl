@@ -1,0 +1,80 @@
+\begin{thebibliography}{11}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Axelbrooke(2017)}]{stuart_axelbrooke_2017}
+Stuart Axelbrooke. 2017.
+\newblock \href {https://doi.org/10.34740/KAGGLE/DSV/8841} {Customer support on
+  twitter}.
+
+\bibitem[{Dahlgren~Lindström et~al.(2025)Dahlgren~Lindström, Methnani,
+  Krause, Ericson, de~Rituerto~de Troya, Coelho~Mollo, and
+  Dobbe}]{rlhf_limits2025}
+Adam Dahlgren~Lindström, Leila Methnani, Lea Krause, Petter Ericson,
+  Íñigo~Martínez de~Rituerto~de Troya, Dimitri Coelho~Mollo, and Roel Dobbe.
+  2025.
+\newblock \href {https://doi.org/10.1007/s10676-025-09837-2} {Helpful,
+  harmless, honest? sociotechnical limits of {AI} alignment and safety through
+  reinforcement learning from human feedback}.
+\newblock \emph{Ethics and Information Technology}, 27(2):28.
+\newblock Epub 2025 Jun 4.
+
+\bibitem[{Hong et~al.(2025)Hong, Ku, and Ko}]{hong2025}
+Yuna Hong, Bonhwa Ku, and Hanseok Ko. 2025.
+\newblock \href {https://doi.org/10.3390/info16110977} {Performance evaluation
+  metrics for empathetic llms}.
+\newblock \emph{Information}, 16(11).
+
+\bibitem[{Iyer et~al.(2026)Iyer, Aggarwal, Koyejo, Heyman, Ong, and
+  Mukherjee}]{iyer2026heartunifiedbenchmarkassessing}
+Laya Iyer, Kriti Aggarwal, Sanmi Koyejo, Gail Heyman, Desmond~C. Ong, and
+  Subhabrata Mukherjee. 2026.
+\newblock \href {http://arxiv.org/abs/2601.19922} {Heart: A unified benchmark
+  for assessing humans and llms in emotional support dialogue}.
+
+\bibitem[{Kim and Khashabi(2025)}]{sycophancy_rebuttal2025}
+Sungwon Kim and Daniel Khashabi. 2025.
+\newblock \href {http://arxiv.org/abs/2509.16533} {Challenging the evaluator:
+  Llm sycophancy under user rebuttal}.
+
+\bibitem[{Kumar et~al.(2026)Kumar, Poungpeth, Yang, Farrell, Lambert, and
+  Groh}]{kumar2026}
+Aakriti Kumar, Nalin Poungpeth, Diyi Yang, Erina Farrell, Bruce~L. Lambert, and
+  Matthew Groh. 2026.
+\newblock \href {https://doi.org/10.1038/s42256-025-01169-6} {When large
+  language models are reliable for judging empathic communication}.
+\newblock \emph{Nature Machine Intelligence}, 8(2):173--185.
+
+\bibitem[{Malmqvist(2024)}]{sycophancy_causes2024}
+Lars Malmqvist. 2024.
+\newblock \href {http://arxiv.org/abs/2411.15287} {Sycophancy in large language
+  models: Causes and mitigations}.
+
+\bibitem[{Sorin et~al.(2024)Sorin, Brin, Barash, Konen, Charney, Nadkarni, and
+  Klang}]{llm_empathy_review2024}
+Vera Sorin, Dana Brin, Yiftach Barash, Eli Konen, Alexander Charney, Girish
+  Nadkarni, and Eyal Klang. 2024.
+\newblock \href {https://doi.org/10.2196/52597} {Large language models and
+  empathy: Systematic review}.
+\newblock \emph{J Med Internet Res}, 26:e52597.
+
+\bibitem[{Vennemeyer et~al.(2026)Vennemeyer, Duong, Zhan, and
+  Jiang}]{vennemeyer2026sycophancy}
+Daniel Vennemeyer, Phan~Anh Duong, Tiffany Zhan, and Tianyu Jiang. 2026.
+\newblock \href {https://openreview.net/forum?id=d24zTCznJu} {Sycophancy is not
+  one thing: Causal separation of sycophantic behaviors in {LLM}s}.
+
+\bibitem[{Zewe(2026)}]{zewe2026}
+Adam Zewe. 2026.
+\newblock \href
+  {https://news.mit.edu/2026/personalization-features-can-make-llms-more-agreeable-0218}
+  {Personalization features can make {LLM}s more agreeable}.
+\newblock {MIT} News.
+
+\bibitem[{Zhu et~al.(2025)Zhu, Dou, Li, Guo, Chen, Zhang, and
+  Kong}]{csconv2025}
+Jie Zhu, Huaixia Dou, Junhui Li, Lifan Guo, Feng Chen, Chi Zhang, and Fang
+  Kong. 2025.
+\newblock \href {http://arxiv.org/abs/2508.04423} {Evaluating, synthesizing,
+  and enhancing for customer support conversation}.
+
+\end{thebibliography}
