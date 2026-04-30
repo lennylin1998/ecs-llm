@@ -29,6 +29,8 @@ The experiment runs in numbered steps. Each step has a corresponding module in `
 | 2 | `src/FIS.ipynb` | Score each complaint with FIS (DistilBERT V_inv + caps / punct / urgency) |
 | 3 | `src/FIS.ipynb` — Stratified Sampling section | Bin FIS into tertiles; sample 600 benchmark pairs and 30 pilot pairs |
 | 4 | `src/judge_pilot.ipynb` | Validate LLM-as-judge rubric on 30 pilot pairs; compute Cohen's κ vs. human raters |
+| 5 | `src/llm_generate.ipynb` | Generate responses from GPT-4o and Gemini 3 Flash for all 600 complaints; append Claude when available |
+| 6 | `src/ecs_score.ipynb` | Score all responses on two ECS dimensions, compute calibration deltas, run statistical tests, produce visualizations |
 
 ---
 
@@ -86,6 +88,48 @@ Each score level includes two anchor examples (complaint + response + explanatio
 
 ---
 
+### `src/llm_generate.ipynb` — LLM Response Generation
+
+Generates responses to all 600 benchmark complaints under an identical neutral system prompt:
+*"You are a customer support agent. Respond to the following customer message in one to three sentences."*
+
+GPT-4o and Gemini 3 Flash are active; the Claude cell is commented out and can be run independently to append a `claude_response` column to an existing output file.
+
+- **Input:** `data/benchmark_600.csv`
+- **Output:** `data/llm_responses.csv` (`pair_id, domain, fis_bin, customer_text, agent_text, gpt4o_response, gemini_response, [claude_response]`)
+- Checkpoints every 50 rows — safe to interrupt and resume
+
+---
+
+### `src/ecs_score.ipynb` — ECS Scoring & Statistical Analysis
+
+Scores every response on the two ECS dimensions, computes calibration deltas, and runs the paper's two statistical tests. Model columns are auto-detected from `llm_responses.csv` — re-running after adding `claude_response` includes Claude automatically.
+
+**ECS dimensions**
+
+| Dimension | Measurement | Weight at high FIS |
+|-----------|-------------|-------------------|
+| Apology density | `sqrt(apology_term_count / word_count)`, normalized by dataset max | 0.6 |
+| Tone-frustration fit | GPT-4o judge score (1–3), normalized to [0, 1] | 0.4 |
+
+At low / moderate FIS both dimensions are weighted equally (0.5 / 0.5).
+
+**Calibration delta:** `Δ = ECS(LLM) − ECS(human)`. Positive = over-empathizes; negative = under-empathizes.
+
+**Outputs**
+
+- `data/tone_fit_scores.csv` — intermediate checkpoint for judge API scores (resumes on re-run)
+- `data/ecs_scores.csv` — per-instance ECS, composite delta, and decomposed component deltas (`delta_ad_*`, `delta_tf_*`)
+- `figures/delta_kde.png` — KDE distributions of Δ by model and FIS level
+- `figures/anova_interaction.png` — model × domain interaction plot and grouped bar chart
+
+**Statistical tests**
+
+1. One-sample t-test per model (Δ vs 0) — reports mean Δ, 95% CI, Cohen's *d*
+2. Two-way ANOVA (model × domain) with Tukey HSD post-hoc
+
+---
+
 ## Data
 
 Large files (`data/`, model weights) are gitignored. The following pre-computed assets
@@ -102,3 +146,7 @@ All SharePoint assets are available at this [shared folder](https://uillinoisedu
 | `negative-sentiment-model/` | FIS notebook (`load_trained_model()`) | SharePoint |
 | `data/benchmark_600.csv` | judge pilot, LLM generation | Produced locally by FIS.ipynb |
 | `data/pilot_30.csv` | judge pilot | Produced locally by FIS.ipynb |
+| `data/llm_responses.csv` | `ecs_score.ipynb` | Produced locally by `llm_generate.ipynb` |
+| `data/tone_fit_scores.csv` | `ecs_score.ipynb` — ECS merge cell | Produced locally by `ecs_score.ipynb` (checkpoint) |
+| `data/ecs_scores.csv` | Analysis / paper | Produced locally by `ecs_score.ipynb` |
+| `figures/` | Paper | Produced locally by `ecs_score.ipynb` |
