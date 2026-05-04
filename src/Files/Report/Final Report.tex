@@ -12,6 +12,7 @@
 \usepackage[utf8]{inputenc}
 
 \usepackage{microtype}
+\usepackage{graphicx}
 
 \usepackage{inconsolata}
 
@@ -33,7 +34,9 @@
 	Large language models (LLMs) are increasingly deployed in customer-facing service contexts, yet their sociolinguistic behavior---specifically how well they calibrate empathy to a customer's emotional state---remains largely unevaluated. This report describes a research project investigating whether frontier LLMs systematically over- or under-empathize relative to real human support agents, and whether such miscalibration varies across industry domains. We use the Customer Support on Twitter dataset \cite{stuart_axelbrooke_2017} as a naturalistic behavioral benchmark, extracting 600 complaint--response pairs stratified across two domains (airlines, telecom) and three frustration levels. We prompt three frontier models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Flash) with each complaint and compare their outputs against human agent responses using a two-dimensional Empathy Calibration Score (ECS). This checkpoint report details the motivation, related work, methodology, experiment design, and a three-week execution plan.
 \end{abstract}
 
-\section{Research Question}
+% ----------------------------------------------------------------------------------------
+
+\section{Introduction}
 
 
 This study addresses two primary questions:
@@ -45,6 +48,7 @@ This study addresses two primary questions:
 
 Together, these questions target a concrete deployment risk: enterprises selecting or prompting LLMs for customer service may unknowingly be introducing systematic tonal mismatch. A model that sounds empathetic in general benchmarks may be tonally inappropriate in practice---either performing hollow over-apology, or presenting as cold and procedural when a customer is genuinely distressed.
 
+% ----------------------------------------------------------------------------------------
 
 \section{Related Work}
 
@@ -63,6 +67,9 @@ The most closely related applied work is \citet{csconv2025}, which introduces a 
 \subsection{The Gap}
 
 Across these three bodies of work, a consistent blind spot emerges. Sycophancy research measures opinion-conformity, not tonal appropriateness. Empathy research evaluates support-context warmth, not calibration to frustration level. Customer service NLP evaluates response quality against idealized rewrites, not observed human behavior. Our study sits at the intersection of all three and uses a unique data asset---naturalistic, multi-domain, paired conversational data---to fill it.
+
+
+% ----------------------------------------------------------------------------------------
 
 \section{Methodology}
 The study follows a three-phase empirical design: (1) benchmark construction from real conversational data, (2) LLM response generation under a neutral prompt, and (3) calibration scoring and statistical comparison. No model training is required.
@@ -115,7 +122,11 @@ Two tests map to the two research questions:
 	\item \textbf{Domain comparison:} A two-way ANOVA (model $\times$ domain) on the calibration delta tests whether miscalibration is domain-invariant or whether certain models are well-calibrated for airline complaints but miscalibrated for telecom, or vice versa.
 \end{enumerate}
 
-\section{Datasets}
+
+% ----------------------------------------------------------------------------------------
+
+\section{Experiments}
+\subsection{Datasets}
 The primary dataset is the Customer Support on Twitter corpus \citep{stuart_axelbrooke_2017}, a CSV of over 3 million tweets and replies from major consumer brands including airlines (AmericanAir, JetBlue, SouthwestAir, AlaskaAir), telecom providers (sprintcare, Ask\_Spectrum, TMobileHelp), and others. Each row includes tweet ID, author ID, text, and a field for the tweet being replied to, enabling thread reconstruction.
 
 We use this dataset in two ways:
@@ -149,52 +160,111 @@ For a detailed full conversation sample please check Table~\ref{full-conversatio
 	}
 \end{table*}
 
-\section{Experiments}
-\subsection{Experiments Setup}
+\subsection{Baselines}
+As for baselines, we evaluate three frontier models as candidate systems: GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash. All three are evaluated under the same minimal neutral prompt with no persona or tone instruction. The human agent responses from the Twitter dataset serve as the behavioral ground truth baseline.
 
-Table~\ref{tab:timeline} outlines the three-week execution plan for this study.
-
-\begin{table*}
-	\centering
-	\begin{tabular}{p{1cm}p{7cm}p{5cm}}
-		\hline
-		\textbf{Week} & \textbf{Tasks} & \textbf{Deliverables} \\
-		\hline
-		Week 1 & Parse Twitter CSV, reconstruct threads, filter to single-turn pairs. Compute FIS using VADER + lexical features. Apply domain mapping (airlines vs.\ telecom). Stratified sample to 600 instances. Write and pilot LLM-as-judge rubric on 30 pairs; measure Cohen's $\kappa$ with 2 human raters. & 600-instance benchmark CSV. Validated judge rubric. Go/no-go on $\kappa$ threshold. \\
-		\hline
-		Week 2 & Run all 600 complaints through GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash (3 $\times$ 600 = 1,800 API calls). Compute apology density for all outputs (automated). Run LLM-as-judge for tone-frustration fit scores on all 1,800 + 600 human responses. Compute ECS and calibration delta per instance. & Full ECS delta table (2,400 rows). Estimated API cost: \$40--60. \\
-		\hline
-		Week 3 & Run one-sample $t$-tests per model (delta vs.\ zero); compute mean $\Delta$, 95\% CI, and Cohen's $d$. Run two-way ANOVA (model $\times$ domain) with Tukey HSD post-hoc. Visualize delta distributions as ridge plots by model and FIS level. Interpret findings. Draft report sections, limitations, and future work. & Analysis notebook. Ridge plot figures. Final report. \\
-		\hline
-	\end{tabular}
-	\caption{Three-week execution plan for the empathy calibration study.}
-	\label{tab:timeline}
-\end{table*}
 
 \subsection{Evaluation Metrics}
 
 Model performance is evaluated using the two-dimensional ECS described in the Methodology section. The primary outcome is the calibration delta $\Delta = ECS(LLM) - ECS(human)$, computed per instance and aggregated per model and domain. We also report apology density independently as a fully model-agnostic signal.
 
-\subsection{Baselines}
+\subsection{Results}
 
-We evaluate three frontier models as candidate systems: GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash. All three are evaluated under the same minimal neutral prompt with no persona or tone instruction. The human agent responses from the Twitter dataset serve as the behavioral ground truth baseline.
+Table~\ref{tab:model composite} shows a brief detail about composite, apology density and tone fit scores. The tested two models are both over-empathized, however, driven by different reason. 
 
-\subsection{Current Results}
+For GPT 4o, its major driver for over-empathized is Apology Density. However, for Gemini, its major driver for over-empathized is Tone Fit.
 
-\textbf{Results pending. Experiments are scheduled for execution in Week 2 of the three-week plan.}
+Figure~\ref{fig:calibration delta} shows a calibration distribution by model under different frustration level. The 0 lines represent how human would react to customers under different frustration level.
 
-\subsection{Expected Results}
+Figure~\ref{fig:model and domain relation}
 
-Based on the literature, we anticipate positive mean calibration deltas for all three frontier models---indicating systematic over-empathizing relative to human agents. We expect each model's one-sample $t$-test to return $p < 0.05$ with a positive mean $\Delta$ and a moderate-to-large Cohen's $d$, reflecting consistent directional bias. We expect delta magnitudes to be higher for high-FIS complaints (frustrated customers trigger stronger RLHF-driven warmth) and to vary across domains (telecom agent responses in the dataset tend to be more procedural, while airline agents are more warm, which may interact differently with model defaults). The domain ANOVA interaction term is the highest-stakes finding: if model $\times$ domain is significant, it suggests that miscalibration is not a fixed property of a model but context-dependent, which has direct implications for domain-specific prompting or fine-tuning.
 
-\section{Challenges and Adjustments}
+\begin{table*}
+	\centering
+	\begin{tabular}{lllll}
+		\hline
+		\textbf{Model} & \textbf{Composite Delta} & \textbf{$\Delta$ Apology\_density} & \textbf{$\Delta$ Tone\_fit} & \textbf{Driver}  \\
+		\hline
+		GPT 40 & 0.0973 & 0.1201 & 0.0694 & Apology\_density \\
+		\hline
+		Gemini & 0.1736 & 0.1072 & 0.2494 & Tone\_fit \\
+		\hline
+	\end{tabular}
+	\caption{Model Composite $\Delta$, $\Delta$ Apology Density, $\Delta$ Tone Fit and Driver.}
+	\label{tab:model composite}
+\end{table*}
 
-\subsection{Simplification from Original Design}
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=\textwidth]{./figures/delta_kde.png}
+	\caption{Calibration Delta Distributions by Model and Frustration Level.}
+	\label{fig:calibration delta}
+\end{figure*}
 
-The original design included four ECS dimensions and a supervised fine-tuning (SFT) sub-experiment on Llama 3 8B as a contrastive model. Both were removed for scope and infrastructure reasons. The ECS was collapsed from four dimensions (apology density, urgency match, solution-orientation ratio, tone warmth) to two (apology density, tone-frustration fit). The two dropped dimensions---urgency match and solution ratio---are harder to define and score reliably in short tweets, and removing them produces a cleaner, more defensible metric. The SFT experiment requires GPU access, training pipelines, and at least two additional weeks, and is deferred to future work. The core empirical claim is fully supported without it.
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=\textwidth]{./figures/anova_interaction.png}
+	\caption{Model and Domain Relationship.}
+	\label{fig:model and domain relation}
+\end{figure*}
+
+
+\subsection{Analysis}
+
+Figure~\ref{fig:calibration delta} illustrates the distributions of calibration error ($\Delta$ = ECS\_{LLM} - ECS\_{human}) across different frustration levels for both GPT-4o and Gemini. A value of zero indicates perfect calibration, while positive values reflect systematic overestimation by the model.
+
+For GPT-4o, the distribution under low frustration is sharply centered around zero, suggesting strong calibration when user frustration is minimal. However, as frustration increases, the distributions shift rightward and become more dispersed, indicating both increased overestimation and higher variance. This trend suggests that GPT-4o’s calibration degrades under more challenging emotional contexts.
+
+In contrast, Gemini exhibits a consistent rightward shift across all frustration levels, with even low-frustration cases showing noticeable overestimation. The effect becomes more pronounced under moderate and high frustration, where the distributions are both further shifted and broader compared to GPT-4o. This indicates that Gemini not only overestimates more systematically but also demonstrates reduced stability.
+
+Overall, both models are sensitive to user frustration, with higher frustration leading to greater positive calibration bias. However, GPT-4o remains better calibrated and more stable across conditions, whereas Gemini shows larger and more variable deviations from human judgments.
+
+We also analyze model calibration across domains and examine whether domain-specific effects interact with model choice. Figure~\ref{fig:model and domain relation} summarizes the mean calibration error ($\Delta$) for two models across the airline and technology domains, with 95\% confidence intervals.
+
+Across both domains, we observe a consistent gap between the two models: gpt4o exhibits lower calibration error than gemini. In the airline domain, gpt4o achieves a mean $\Delta$ of approximately 0.05, compared to 0.12 for gemini. This pattern persists in the technology domain, where gpt4o reaches ~0.14 while gemini increases to ~0.23. These results indicate that gpt4o is systematically better calibrated, regardless of domain.
+
+In addition, both models show higher calibration error in the technology domain than in the airline domain. This suggests that the technology domain poses greater challenges for reliable confidence estimation, potentially due to increased ambiguity or broader knowledge requirements.
+
+
+% ----------------------------------------------------------------------------------------
+
+
+\section{Conclusions}
+
+This work is designed to test how LLMs perform under different frustration level and whether LLMs will be over or under empathized and what is its driver. We answered the following question in this paper.
+
+\begin{enumerate}
+	\item \textbf{RQ1 — Do frontier LLMs systematically over- or under-empathize relative to human agents?}
+	
+	Both models show statistically significant positive calibration deltas, meaning both over-empathize relative to human agents. Also, there’s different tendency in models and frustration levels.
+	
+	
+	\item \textbf{RQ2 — Is this miscalibration consistent across industry domains (airline vs. technology)?}
+	
+	The two-way ANOVA finds a significant main effect of domain, meaning both models over-empathize more in the technology sector than in the airline sector. A plausible interpretation: technology-sector human agents in the dataset tend to write more procedural, lower-warmth replies, so LLM defaults diverge more from that baseline than from the warmer airline-agent style.
+	
+\end{enumerate}
+
+% ----------------------------------------------------------------------------------------
+
+\section{Limitations}
+
+Due to the token and API shortage, we limited our models on only GPT-4o and Gemini. More tested model would provide a better result and a more detailed explanation on whether the over-empathize is a universal problem or is it only related to these two models. 
+
+Meanwhile, due to the limitation of customer service data, we cannot include all real-world conversation between a human agent and a customer. Thus, there might be a potential bias amount these analyzed data, which might cause the model to react over-empathized. 
+
+
+
+
+
+% ----------------------------------------------------------------------------------------
 
 \bibliography{anthology,custom}
 \bibliographystyle{acl_natbib}
+
+
+% ----------------------------------------------------------------------------------------
 
 \appendix
 

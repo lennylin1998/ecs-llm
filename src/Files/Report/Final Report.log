@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.15)  29 APR 2026 18:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.15)  4 MAY 2026 00:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -279,6 +279,23 @@ File: microtype.cfg 2025/07/09 v3.2b microtype main configuration file (RS)
 )
 LaTeX Info: Redefining \microtypesetup on input line 3065.
 )
+(d:/texlive/2025/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
+
+(d:/texlive/2025/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
+(d:/texlive/2025/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(d:/texlive/2025/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 106.
+)
+\Gin@req@height=\dimen170
+\Gin@req@width=\dimen171
+)
 (d:/texlive/2025/texmf-dist/tex/latex/inconsolata/inconsolata.sty
 Package: inconsolata 2019/05/17 v1.12
 
@@ -305,14 +322,14 @@ File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 \lst@gtempboxa=\box54
 \lst@token=\toks26
 \lst@length=\count306
-\lst@currlwidth=\dimen170
+\lst@currlwidth=\dimen172
 \lst@column=\count307
 \lst@pos=\count308
-\lst@lostspace=\dimen171
-\lst@width=\dimen172
+\lst@lostspace=\dimen173
+\lst@width=\dimen174
 \lst@newlines=\count309
 \lst@lineno=\count310
-\lst@maxwidth=\dimen173
+\lst@maxwidth=\dimen175
 
 (d:/texlive/2025/texmf-dist/tex/latex/listings/lstpatch.sty
 File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
@@ -341,41 +358,50 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 (./Final Report.aux)
 \openout1 = `"Final Report.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
 
 (d:/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count314
-\scratchdimen=\dimen174
+\scratchdimen=\dimen176
 \scratchbox=\box56
 \nofMPsegments=\count315
 \nofMParguments=\count316
 \everyMPshowfont=\toks27
 \MPscratchCnt=\count317
-\MPscratchDim=\dimen175
+\MPscratchDim=\dimen177
 \MPnumerator=\count318
 \makeMPintoPDFobject=\count319
 \everyMPtoPDFconversion=\toks28
-)
-Package hyperref Info: Link coloring ON on input line 30.
- (./Final Report.out) (./Final Report.out)
+) (d:/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(d:/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package hyperref Info: Link coloring ON on input line 31.
+
+(./Final Report.out) (./Final Report.out)
 \@outlinefile=\write3
 \openout3 = `"Final Report.out"'.
 
@@ -417,15 +443,15 @@ Package hyperref Info: Link coloring ON on input line 30.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 30.
-Package microtype Info: Applying patch `item' on input line 30.
-Package microtype Info: Applying patch `toc' on input line 30.
-Package microtype Info: Applying patch `eqnum' on input line 30.
+LaTeX Info: Redefining \microtypecontext on input line 31.
+Package microtype Info: Applying patch `item' on input line 31.
+Package microtype Info: Applying patch `toc' on input line 31.
+Package microtype Info: Applying patch `eqnum' on input line 31.
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 30.
+Package microtype Warning: Unable to apply patch `footnote' on input line 31.
 
-Package microtype Info: Applying patch `verbatim' on input line 30.
-LaTeX Info: Redefining \microtypesetup on input line 30.
+Package microtype Info: Applying patch `verbatim' on input line 31.
+LaTeX Info: Redefining \microtypesetup on input line 31.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -450,46 +476,46 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 31.
+(Font)              <12> on input line 32.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 31.
+(Font)              <8> on input line 32.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 31.
-LaTeX Font Info:    Trying to load font information for U+lasy on input line 31
+(Font)              <6> on input line 32.
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 32
 .
 
 (d:/texlive/2025/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 31
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 32
 .
 
 (d:/texlive/2025/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 12.0pt on input line 31.
+(Font)              scaled to size 12.0pt on input line 32.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Underfull \hbox (badness 1231) in paragraph at lines 33--34
+Underfull \hbox (badness 1231) in paragraph at lines 34--35
 \T1/ptm/m/n/10 (+20) ingly de-ployed in customer-facing ser-vice
  []
 
 
-Underfull \hbox (badness 6236) in paragraph at lines 42--43
+Underfull \hbox (badness 6236) in paragraph at lines 45--46
 []\T1/ptm/m/n/10.95 (+20) Do fron-tier LLMs sys-tem-at-i-cally over-
  []
 
 
-Underfull \hbox (badness 1062) in paragraph at lines 42--43
+Underfull \hbox (badness 1062) in paragraph at lines 45--46
 \T1/ptm/m/n/10.95 (+20) empathize or under-empathize rel-a-tive to
  []
 
 
-Underfull \hbox (badness 1194) in paragraph at lines 43--44
+Underfull \hbox (badness 1194) in paragraph at lines 46--47
 []\T1/ptm/m/n/10.95 (+20) Is this em-pa-thy mis-cal-i-bra-tion con-sis-tent
  []
 
@@ -501,88 +527,81 @@ dvips/inconsolata/i4-t1-0.enc}
 
 ]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 72.
+(Font)              <10.95> on input line 79.
 
-Underfull \hbox (badness 10000) in paragraph at lines 92--93
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
 []\T1/ptm/b/n/10.95 (+20) Weight
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 92--93
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
 \T1/ptm/b/n/10.95 (+20) at high
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 101--102
 []\T1/ptm/m/n/10.95 (+20) Higher
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--96
+Underfull \hbox (badness 10000) in paragraph at lines 103--103
 []\T1/ptm/m/n/10.95 (+20) Tone-
  []
 
 
-Underfull \hbox (badness 7099) in paragraph at lines 96--96
+Underfull \hbox (badness 7099) in paragraph at lines 103--103
 \T1/ptm/m/n/10.95 (+20) the re-sponse tone
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--97
+Underfull \hbox (badness 10000) in paragraph at lines 103--104
 []\T1/ptm/m/n/10.95 (+20) Equal
  []
 
 
-Overfull \hbox (7.54721pt too wide) in paragraph at lines 90--99
+Overfull \hbox (7.54721pt too wide) in paragraph at lines 97--106
  [][] 
  []
 
 [2]
-Underfull \hbox (badness 4647) in paragraph at lines 115--116
+Underfull \hbox (badness 4647) in paragraph at lines 122--123
 \T1/ptm/m/n/10.95 (+20) tests whether mis-cal-i-bra-tion is domain-
  []
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-24.
+35.
 (d:/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Underfull \hbox (badness 5460) in paragraph at lines 124--125
+Underfull \hbox (badness 5460) in paragraph at lines 135--136
 []\T1/ptm/b/n/10.95 (+20) Test bench-mark: \T1/ptm/m/n/10.95 (+20) 600 fil-tere
 d, strat-i-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 163--163
-[]\T1/ptm/m/n/10.95 (+20) Week
- []
-
-
-Underfull \hbox (badness 1990) in paragraph at lines 163--164
-[]\T1/ptm/m/n/10.95 (+20) 600-instance bench-mark CSV.
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 165--165
-[]\T1/ptm/m/n/10.95 (+20) Week
- []
-
-
-Underfull \hbox (badness 1189) in paragraph at lines 165--165
-[]\T1/ptm/m/n/10.95 (+20) Run all 600 com-plaints through GPT-4o,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 167--167
-[]\T1/ptm/m/n/10.95 (+20) Week
- []
-
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 193.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 193.
+<./figures/delta_kde.png, id=82, 857.604pt x 297.2706pt>
+File: ./figures/delta_kde.png Graphic file (type png)
+<use ./figures/delta_kde.png>
+Package pdftex.def Info: ./figures/delta_kde.png  used on input line 199.
+(pdftex.def)             Requested size: 455.24411pt x 157.80214pt.
+<./figures/anova_interaction.png, id=84, 859.5312pt x 303.534pt>
+File: ./figures/anova_interaction.png Graphic file (type png)
+<use ./figures/anova_interaction.png>
+Package pdftex.def Info: ./figures/anova_interaction.png  used on input line 20
+7.
+(pdftex.def)             Requested size: 455.24411pt x 160.76572pt.
 [3] [4] (./Final Report.bbl
 Underfull \hbox (badness 1590) in paragraph at lines 12--20
 []\T1/ptm/m/n/10 (+20) Adam Dahlgren Lind-ström, Leila Meth-nani, Lea
  []
 
-) [5] (./Final Report.aux)
+[5 <./figures/delta_kde.png> <./figures/anova_interaction.png>]) [6
+
+]
+(./Final Report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -591,13 +610,13 @@ Package rerunfilecheck Info: File `"Final Report".out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 15041 strings out of 467533
- 237815 string characters out of 5423662
- 700566 words of memory out of 5000000
- 43526 multiletter control sequences out of 15000+600000
- 665637 words of font info for 210 fonts, out of 8000000 for 9000
+ 15451 strings out of 467533
+ 244979 string characters out of 5423662
+ 705445 words of memory out of 5000000
+ 43911 multiletter control sequences out of 15000+600000
+ 665958 words of font info for 213 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,11n,93p,1078b,478s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,10n,93p,1078b,593s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/texlive/2025/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.p
 fb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/te
 xlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2025
@@ -605,10 +624,10 @@ xlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2025
 st/fonts/type1/urw/times/utmb8a.pfb><d:/texlive/2025/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb><d:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb
 >
-Output written on "Final Report.pdf" (5 pages, 115778 bytes).
+Output written on "Final Report.pdf" (6 pages, 274875 bytes).
 PDF statistics:
- 179 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
- 47 named destinations out of 1000 (max. 500000)
- 39425 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 196 PDF objects out of 1000 (max. 8388607)
+ 166 compressed objects within 2 object streams
+ 51 named destinations out of 1000 (max. 500000)
+ 40971 words of extra memory for PDF output out of 42996 (max. 10000000)
 
