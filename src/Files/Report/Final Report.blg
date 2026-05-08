@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2025)
+This is BibTeX, Version 0.99e (TeX Live 2026)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Final Report.aux
 The style file: acl_natbib.bst
@@ -9,47 +9,47 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: anthology.bib
 Database file #2: custom.bib
 Warning--I'm ignoring llm_empathy_review2024's extra "url" field
---line 231 of file custom.bib
+--line 242 of file custom.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 11 entries,
+You've used 12 entries,
             3571 wiz_defined-function locations,
-            768 strings with 7996 characters,
-and the built_in function-call counts, 7393 in all, are:
-= -- 587
-> -- 458
-< -- 4
-+ -- 146
-- -- 135
-* -- 540
-:= -- 1218
-add.period$ -- 39
-call.type$ -- 11
-change.case$ -- 101
-chr.to.int$ -- 11
-cite$ -- 11
-duplicate$ -- 452
-empty$ -- 475
-format.name$ -- 164
-if$ -- 1563
+            776 strings with 8207 characters,
+and the built_in function-call counts, 8029 in all, are:
+= -- 642
+> -- 482
+< -- 5
++ -- 153
+- -- 141
+* -- 584
+:= -- 1313
+add.period$ -- 43
+call.type$ -- 12
+change.case$ -- 108
+chr.to.int$ -- 12
+cite$ -- 12
+duplicate$ -- 497
+empty$ -- 525
+format.name$ -- 175
+if$ -- 1703
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 94
-newline$ -- 54
-num.names$ -- 44
-pop$ -- 206
+missing$ -- 103
+newline$ -- 59
+num.names$ -- 48
+pop$ -- 222
 preamble$ -- 1
-purify$ -- 89
+purify$ -- 95
 quote$ -- 0
-skip$ -- 320
+skip$ -- 354
 stack$ -- 0
-substring$ -- 172
-swap$ -- 231
+substring$ -- 189
+swap$ -- 258
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 99
+type$ -- 108
 warning$ -- 0
-while$ -- 37
+while$ -- 41
 width$ -- 0
-write$ -- 129
+write$ -- 142
 (There was 1 warning)

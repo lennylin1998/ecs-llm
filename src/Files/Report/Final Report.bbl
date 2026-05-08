@@ -1,4 +1,4 @@
-\begin{thebibliography}{11}
+\begin{thebibliography}{12}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{Axelbrooke(2017)}]{stuart_axelbrooke_2017}
@@ -30,6 +30,13 @@ Laya Iyer, Kriti Aggarwal, Sanmi Koyejo, Gail Heyman, Desmond~C. Ong, and
   Subhabrata Mukherjee. 2026.
 \newblock \href {http://arxiv.org/abs/2601.19922} {Heart: A unified benchmark
   for assessing humans and llms in emotional support dialogue}.
+
+\bibitem[{Kejriwal and Zhou(2020)}]{kejriwal2020urgency}
+Mayank Kejriwal and Peilin Zhou. 2020.
+\newblock \href {https://doi.org/10.1007/s13278-020-00670-7} {On detecting
+  urgency in short crisis messages using minimal supervision and transfer
+  learning}.
+\newblock \emph{Social Network Analysis and Mining}, 10(1):58.
 
 \bibitem[{Kim and Khashabi(2025)}]{sycophancy_rebuttal2025}
 Sungwon Kim and Daniel Khashabi. 2025.

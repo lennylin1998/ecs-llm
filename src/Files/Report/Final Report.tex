@@ -17,6 +17,12 @@
 \usepackage{inconsolata}
 
 \usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\setlength{\emergencystretch}{5em}
+\hbadness=10000
+\vbadness=10000
 
 
 \title{Evaluating Employee Communication Behaviors Using Large Language Models}
@@ -31,7 +37,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-	Large language models (LLMs) are increasingly deployed in customer-facing service contexts, yet their sociolinguistic behavior---specifically how well they calibrate empathy to a customer's emotional state---remains largely unevaluated. This report describes a research project investigating whether frontier LLMs systematically over- or under-empathize relative to real human support agents, and whether such miscalibration varies across industry domains. We use the Customer Support on Twitter dataset \cite{stuart_axelbrooke_2017} as a naturalistic behavioral benchmark, extracting 600 complaint--response pairs stratified across two domains (airlines, telecom) and three frustration levels. We prompt three frontier models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Flash) with each complaint and compare their outputs against human agent responses using a two-dimensional Empathy Calibration Score (ECS). This checkpoint report details the motivation, related work, methodology, experiment design, and a three-week execution plan.
+	Large language models (LLMs) are increasingly deployed in customer-facing service contexts, yet their sociolinguistic behavior---specifically how well they calibrate empathy to a customer's emotional state---remains largely unevaluated. This report describes a research project investigating whether frontier LLMs systematically over- or under-empathize relative to real human support agents, and whether such miscalibration varies across industry domains. We use the Customer Support on Twitter dataset \cite{stuart_axelbrooke_2017} as a naturalistic behavioral benchmark, extracting 600 complaint--response pairs stratified across two domains (airlines, technology) and three frustration levels. We prompt two frontier models (GPT-4o and Gemini 3 Flash) with each complaint and compare their outputs against human agent responses using a two-dimensional Empathy Calibration Score (ECS). This final report details the motivation, related work, methodology, experiment design, results, and analysis.
 \end{abstract}
 
 % ----------------------------------------------------------------------------------------
@@ -43,7 +49,7 @@ This study addresses two primary questions:
 
 \begin{enumerate}
 	\item Do frontier LLMs systematically over-empathize or under-empathize relative to trained human customer support agents, as measured by a calibration delta against a naturalistic behavioral benchmark?
-	\item Is this empathy miscalibration consistent across industry domains, or does it vary by context---specifically between airlines and telecom?
+	\item Is this empathy miscalibration consistent across industry domains, or does it vary by context---specifically between airlines and technology companies?
 \end{enumerate}
 
 Together, these questions target a concrete deployment risk: enterprises selecting or prompting LLMs for customer service may unknowingly be introducing systematic tonal mismatch. A model that sounds empathetic in general benchmarks may be tonally inappropriate in practice---either performing hollow over-apology, or presenting as cold and procedural when a customer is genuinely distressed.
@@ -76,7 +82,36 @@ The study follows a three-phase empirical design: (1) benchmark construction fro
 
 \subsection{Benchmark Construction}
 
-We parse the Twitter Customer Support dataset \cite{stuart_axelbrooke_2017} to extract single-turn complaint--response pairs, where a customer tweet is followed directly by a verified brand account reply. We compute a Frustration Intensity Score (FIS) for each customer tweet using a composite of VADER sentiment, all-caps ratio, punctuation density, and presence of urgency vocabulary (``never again'', ``unacceptable'', ``immediately''). FIS is binned into three levels: low, moderate, and high. We retain two industry domains---airlines and telecom---and apply stratified sampling to produce a benchmark of 600 instances (100 per cell: 2 domains $\times$ 3 FIS levels).
+We parse the Twitter Customer Support dataset \cite{stuart_axelbrooke_2017} to extract single-turn complaint--response pairs, where a customer tweet is followed directly by a verified brand account reply. We compute a Frustration Intensity Score (FIS) for each customer tweet using a composite of four signals:
+
+\begin{multline}
+    FIS = \tfrac{8}{10}V_{inv} + \tfrac{0.5}{10}C_{ratio} \\
+          + \tfrac{0.5}{10}P_{dens} + \tfrac{1}{10}U_{flag}
+\end{multline}
+
+\noindent where the weights are set in an 8:0.5:0.5:1 ratio ($w_1 = \tfrac{8}{10}$, $w_2 = w_3 = \tfrac{0.5}{10}$, $w_4 = \tfrac{1}{10}$), reflecting the strongly dominant role of the DistilBERT sentiment score. The four components are defined as follows.
+
+\textbf{$V_{inv}$ (DistilBERT Negative Probability):} $P(\text{NEGATIVE} \mid \text{tweet})$ produced by a DistilBERT model fine-tuned on Sentiment140. Higher values reflect stronger negative sentiment; the output is naturally bounded in $[0,1]$:
+\begin{equation}
+    V_{inv} = P_{\theta}(\text{NEGATIVE} \mid \text{tweet})
+\end{equation}
+
+\textbf{$C_{ratio}$ (All-Caps Ratio):} The proportion of uppercase characters in the tweet, bounded in $[0,1]$:
+\begin{equation}
+    C_{ratio} = \frac{\displaystyle\sum_{i=1}^{N} \mathbb{1}[\text{char}_i \text{ is uppercase}]}{N}
+\end{equation}
+
+\textbf{$P_{dens}$ (Punctuation Density):} The frequency of exclamation and question marks, which also falls naturally in $[0,1]$:
+\begin{equation}
+    P_{dens} = \frac{\displaystyle\sum_{i=1}^{N} \mathbb{1}[\text{char}_i \in \{!, ?\}]}{N}
+\end{equation}
+
+\textbf{$U_{flag}$ (Urgency Flag):} A binary indicator of whether any high-urgency phrase (e.g., ``never again'', ``unacceptable'', ``immediately'') appears in the tweet \cite{kejriwal2020urgency}:
+\begin{equation}
+    U_{flag} = \begin{cases} 1 & \text{if an urgency phrase is present} \\ 0 & \text{otherwise} \end{cases}
+\end{equation}
+
+FIS is binned into three levels: low, moderate, and high. We retain two industry domains---airlines and technology---and apply stratified sampling to produce a benchmark of 600 instances (100 per cell: 2 domains $\times$ 3 FIS levels).
 
 \subsection{LLM Response Generation}
 
@@ -86,7 +121,7 @@ Each of the 600 customer complaint tweets is passed to three frontier models und
 	\textit{``You are a customer support agent. Respond to the following customer message in one to three sentences.''}
 \end{quote}
 
-No persona, no tone instruction, and no domain context is supplied. This deliberate minimalism ensures we measure the model's default social calibration rather than a prompted one. The three models evaluated are GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash. The human agent's original response from the dataset serves as the behavioral reference (ground truth).
+No persona, no tone instruction, and no domain context is supplied. This deliberate minimalism ensures we measure the model's default social calibration rather than a prompted one. The two models evaluated are GPT-4o and Gemini 3 Flash. The human agent's original response from the dataset serves as the behavioral reference (ground truth).
 
 \subsection{Empathy Calibration Score (ECS)}
 
@@ -98,9 +133,9 @@ The ECS is a two-dimensional rubric designed to measure not absolute empathy, bu
 		\hline
 		\textbf{Dimension} & \textbf{Measurement} & \textbf{Weight at high FIS} \\
 		\hline
-		Apology density & Normalized count of apology/regret terms (regex). Fully automated. & Higher weight \\
+		Apology density & $\sqrt{\frac{\text{Count of Apology Words}}{\text{Total Words}}}$ — square-root transformed frequency of apology/regret terms (regex). Fully automated. & Higher weight \\
 		\hline
-		Tone-frustration fit & LLM-as-judge (GPT-4o) scores 1--5: does the response tone match the emotional register of the complaint? & Equal weight \\
+		Tone-frustration fit & LLM-as-judge (GPT-4o) scores 1--3: does the response tone match the emotional register of the complaint? & Equal weight \\
 		\hline
 	\end{tabular}
 	\caption{ECS dimensions, measurement approach, and weighting at high frustration levels.}
@@ -119,15 +154,14 @@ Two tests map to the two research questions:
 
 \begin{enumerate}
 	\item \textbf{Systematic miscalibration per model:} For each model, a one-sample $t$-test tests whether the mean calibration delta $\Delta$ differs significantly from zero. We report the mean $\Delta$ with a 95\% confidence interval and Cohen's $d$ as an effect-size measure. A positive mean $\Delta$ with $p < 0.05$ constitutes evidence of systematic over-empathizing relative to trained human agents.
-	\item \textbf{Domain comparison:} A two-way ANOVA (model $\times$ domain) on the calibration delta tests whether miscalibration is domain-invariant or whether certain models are well-calibrated for airline complaints but miscalibrated for telecom, or vice versa.
-\end{enumerate}
+	\item \textbf{Domain comparison:} A two-way ANOVA (model $\times$ domain) on the calibration delta tests whether miscalibration is domain-invariant or whether certain models are well-calibrated for airline complaints but miscalibrated for technology-sector complaints, or vice versa.\end{enumerate}
 
 
 % ----------------------------------------------------------------------------------------
 
 \section{Experiments}
 \subsection{Datasets}
-The primary dataset is the Customer Support on Twitter corpus \citep{stuart_axelbrooke_2017}, a CSV of over 3 million tweets and replies from major consumer brands including airlines (AmericanAir, JetBlue, SouthwestAir, AlaskaAir), telecom providers (sprintcare, Ask\_Spectrum, TMobileHelp), and others. Each row includes tweet ID, author ID, text, and a field for the tweet being replied to, enabling thread reconstruction.
+The primary dataset is the Customer Support on Twitter corpus \citep{stuart_axelbrooke_2017}, a CSV of over 3 million tweets and replies from major consumer brands including airlines (AmericanAir, Delta, British\_Airways, SouthwestAir, JetBlue, AlaskaAir) and technology companies spanning telecom carriers (comcastcares, TMobileHelp, Ask\_Spectrum, sprintcare, VerizonSupport, ATT) and consumer tech platforms (AmazonHelp, AppleSupport), among others. Each row includes tweet ID, author ID, text, and a field for the tweet being replied to, enabling thread reconstruction.
 
 We use this dataset in two ways:
 
@@ -161,7 +195,7 @@ For a detailed full conversation sample please check Table~\ref{full-conversatio
 \end{table*}
 
 \subsection{Baselines}
-As for baselines, we evaluate three frontier models as candidate systems: GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Flash. All three are evaluated under the same minimal neutral prompt with no persona or tone instruction. The human agent responses from the Twitter dataset serve as the behavioral ground truth baseline.
+As for baselines, we evaluate two frontier models as candidate systems: GPT-4o and Gemini 3 Flash. Both are evaluated under the same minimal neutral prompt with no persona or tone instruction. The human agent responses from the Twitter dataset serve as the behavioral ground truth baseline.
 
 
 \subsection{Evaluation Metrics}
@@ -176,7 +210,7 @@ For GPT 4o, its major driver for over-empathized is Apology Density. However, fo
 
 Figure~\ref{fig:calibration delta} shows a calibration distribution by model under different frustration level. The 0 lines represent how human would react to customers under different frustration level.
 
-Figure~\ref{fig:model and domain relation}
+Figure~\ref{fig:model and domain relation} shows the mean calibration delta per model across the two domains with 95\% confidence intervals.
 
 
 \begin{table*}
@@ -185,7 +219,7 @@ Figure~\ref{fig:model and domain relation}
 		\hline
 		\textbf{Model} & \textbf{Composite Delta} & \textbf{$\Delta$ Apology\_density} & \textbf{$\Delta$ Tone\_fit} & \textbf{Driver}  \\
 		\hline
-		GPT 40 & 0.0973 & 0.1201 & 0.0694 & Apology\_density \\
+		GPT-4o & 0.0973 & 0.1201 & 0.0694 & Apology\_density \\
 		\hline
 		Gemini & 0.1736 & 0.1072 & 0.2494 & Tone\_fit \\
 		\hline
@@ -196,7 +230,7 @@ Figure~\ref{fig:model and domain relation}
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[width=\textwidth]{./figures/delta_kde.png}
+	\includegraphics[width=\textwidth]{./delta_kde.png}
 	\caption{Calibration Delta Distributions by Model and Frustration Level.}
 	\label{fig:calibration delta}
 \end{figure*}
@@ -204,7 +238,7 @@ Figure~\ref{fig:model and domain relation}
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[width=\textwidth]{./figures/anova_interaction.png}
+	\includegraphics[width=\textwidth]{./anova_interaction.png}
 	\caption{Model and Domain Relationship.}
 	\label{fig:model and domain relation}
 \end{figure*}
@@ -259,6 +293,16 @@ Meanwhile, due to the limitation of customer service data, we cannot include all
 
 
 % ----------------------------------------------------------------------------------------
+
+\section{Challenges and Adjustments}
+
+\subsection{Simplification from Original Design}
+
+The original design included four ECS dimensions and a supervised fine-tuning (SFT) sub-experiment on Llama 3 8B as a contrastive model. Both were removed for scope and infrastructure reasons. The ECS was collapsed from four dimensions (apology density, urgency match, solution-orientation ratio, tone warmth) to two (apology density, tone-frustration fit). The two dropped dimensions---urgency match and solution ratio---are harder to define and score reliably in short tweets, and removing them produces a cleaner, more defensible metric. The SFT experiment requires GPU access, training pipelines, and at least two additional weeks, and is deferred to future work. The core empirical claim is fully supported without it.
+
+\subsection{Model Availability}
+
+Due to API access constraints during the experiment window, Claude 3.5 Sonnet could not be included in the main run. The pipeline is designed to append Claude responses and re-run scoring when access is restored; results in this report cover GPT-4o and Gemini 3 Flash only.
 
 \bibliography{anthology,custom}
 \bibliographystyle{acl_natbib}
